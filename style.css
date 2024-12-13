@@ -32,6 +32,12 @@ html {
       bottom: 20px;
       right: 20px;
     }
+
+    &#crop-btn {
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 
   #menu {
@@ -54,5 +60,14 @@ html {
         cursor: pointer;
       }
     }
+  }
+
+  #crop-frame {
+    pointer-events: none;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 1px solid orange;
+    box-shadow: 0 0 3px black, inset 0 0 3px black;
   }
 }

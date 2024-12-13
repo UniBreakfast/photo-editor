@@ -5,23 +5,28 @@ const body = document.getElementById('body');
 const openBtn = document.getElementById('open-photo');
 const saveBtn = document.getElementById('save-photo');
 const menuBtn = document.getElementById('menu-btn');
+const cropBtn = document.getElementById('crop-btn');
 const menu = document.getElementById('menu');
 const grayscaleItem = document.getElementById('grayscale');
 const rotateItem = document.getElementById('rotate');
 const scaleItem = document.getElementById('scale');
+const cropItem = document.getElementById('crop');
 const scaleModal = document.getElementById('scale-modal');
 const scaleRatioInput = document.getElementById('scale-ratio');
 const applyScaleBtn = document.getElementById('apply-scale');
+const cropFrame = document.getElementById('crop-frame');
 
 body.append(canvas);
 
 openBtn.onclick = openPhoto;
 saveBtn.onclick = savePhoto;
 menuBtn.onclick = toggleMenu;
+cropBtn.onclick = cropPhoto;
 menu.onclick = toggleMenu;
 grayscaleItem.onclick = grayscalePhoto;
 rotateItem.onclick = rotatePhoto;
 scaleItem.onclick = showScaleModal;
+cropItem.onclick = showCropFrame;
 applyScaleBtn.onclick = applyScale;
 
 function toggleMenu() {
@@ -30,6 +35,39 @@ function toggleMenu() {
 
 function showScaleModal() {
   scaleModal.showModal();
+}
+
+function showCropFrame() {
+  cropFrame.hidden = false;
+  cropBtn.hidden = false;
+
+  onkeydown = (e) => {
+    if (e.key === 'Escape') {
+      cropFrame.hidden = true;
+      onkeydown = null;
+    }
+  };
+
+  canvas.onmousedown = (e) => {
+    const { x: x1, y: y1 } = e;
+
+    cropFrame.style.left = `${x1}px`;
+    cropFrame.style.top = `${y1}px`;
+    cropFrame.style.width = '0px';
+    cropFrame.style.height = '0px';
+
+    canvas.onmousemove = (e) => {
+      const { x: x2, y: y2 } = e;
+
+      cropFrame.style.width = `${x2 - x1}px`;
+      cropFrame.style.height = `${y2 - y1}px`;
+    };
+
+    canvas.onmouseup = () => {
+      canvas.onmousemove = null;
+      canvas.onmouseup = null;
+    };
+  };
 }
 
 async function openPhoto() {
@@ -141,4 +179,19 @@ function applyScale() {
   canvas.width = scaledWidth;
   canvas.height = scaledHeight;
   ctx.putImageData(scaledImageData, 0, 0);
+}
+
+function cropPhoto() {
+  const x1 = parseInt(cropFrame.style.left) - canvas.offsetLeft;
+  const y1 = parseInt(cropFrame.style.top) - canvas.offsetTop;
+  const width = parseInt(cropFrame.style.width);
+  const height = parseInt(cropFrame.style.height);
+  const imageData = ctx.getImageData(x1, y1, width, height);
+
+  canvas.width = width;
+  canvas.height = height;
+  ctx.putImageData(imageData, 0, 0);
+
+  cropFrame.hidden = true;
+  cropBtn.hidden = true;
 }
