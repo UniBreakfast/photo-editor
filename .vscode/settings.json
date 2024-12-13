@@ -1,0 +1,16 @@
+{
+  "workbench.colorCustomizations": {
+    "editor.lineHighlightBackground": "#1073cf2d",
+    "editor.lineHighlightBorder": "#9fced11f",
+    "activityBar.background": "#500A58",
+    "titleBar.activeBackground": "#710E7B",
+    "titleBar.activeForeground": "#FEFCFF"
+  },
+  "liveServer.settings.port": 5501,
+  "liveServer.settings.ignoreFiles": [
+    ".vscode/**",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.ts"
+  ]
+}
